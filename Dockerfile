@@ -12,7 +12,7 @@ ARG PATH="/root/miniconda3/bin:$PATH"
 RUN apt-get update --yes && \
     apt-get upgrade --yes && \
 
-    # Basic Utilities
+    # Basic Utilities (petceb added)
     apt install --yes --no-install-recommends \
     bash \
     ca-certificates \
