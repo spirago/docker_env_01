@@ -8,10 +8,15 @@ ENV PATH = "/usr/local/bin:$PATH"
 # ENV PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjS9jZFlpVRQLFMFoV3kBdz+lxMOaBxSJ1eFioVZ5+c oli2@poczta.onet.pl"
 ARG PATH="/root/miniconda3/bin:$PATH"
 
-# Update and install some basic packages (tom added)
+# Update and install some basic packages (petceb added => 15-19)
 RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
+    openssh-server \
+    curl \
+    unzip \
+    zip \
+    wget \
     ca-certificates \
     libglib2.0-0 \
     libxext6 \
@@ -20,24 +25,6 @@ RUN apt-get update && apt-get install -y \
     git \
     mercurial \
     subversion
-
-# Basic Utilities (petceb added)
-RUN apt install --yes --no-install-recommends \
-    bash \
-    curl \
-    file \
-    inotify-tools \
-    libgl1 \
-    nano \
-    nginx \
-    openssh-server \
-    procps \
-    rsync \
-    software-properties-common \
-    unzip \
-    wget \
-    zip && \
-
 
 # Set up Miniconda
 # RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
