@@ -114,7 +114,7 @@ RUN brew update && brew install pyenv
 
 # NGINX Proxy
 COPY nginx.conf /etc/nginx/nginx.conf
-# COPY --from=proxy readme.html /usr/share/nginx/html/readme.html
+COPY readme.html /usr/share/nginx/html/readme.html
 
 # Copy the README.md
 COPY README.md /usr/share/nginx/html/README.md
