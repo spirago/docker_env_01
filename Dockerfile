@@ -1,70 +1,123 @@
-# Use Ubuntu 22.04 as the base image
-FROM ubuntu:22.04
+FROM nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04
 
-# Set environment variables to avoid any prompts during package installation
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ENV SHELL=/bin/bash
+ENV PYTHONUNBUFFERED=True
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH="/root/miniconda3/bin:$PATH"
-ENV PATH = "/usr/local/bin:$PATH"
-# ENV PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjS9jZFlpVRQLFMFoV3kBdz+lxMOaBxSJ1eFioVZ5+c oli2@poczta.onet.pl"
-ARG PATH="/root/miniconda3/bin:$PATH"
+ENV HF_DATASETS_CACHE=/runpod-volume/.cache/huggingface/datasets
 
-# Update and install some basic packages (petceb added => 15-22)
-RUN apt-get update && apt-get install -y \
-    wget \
-    bzip2 \
-    openssh-server \
-    curl \
-    bash \
-    unzip \
-    zip \
-    ca-certificates \
-    libglib2.0-0 \
-    libxext6 \
-    libsm6 \
-    libxrender1 \
-    git \
-    mercurial \
-    subversion
-
-# Set up Miniconda
-# RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-#     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
-#     rm ~/miniconda.sh && \
-#     /opt/conda/bin/conda clean -tipsy && \
-#     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-#     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-#     echo "conda activate base" >> ~/.bashrc
-# RUN wget \
-#     https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-#     && mkdir /root/.conda \
-#     && bash Miniconda3-latest-Linux-x86_64.sh -b \
-#     && rm -f Miniconda3-latest-Linux-x86_64.sh 
-
-# # Add conda to PATH
-# ENV PATH /opt/conda/bin:$PATH
-
-
-# # # Install pip in the base conda environment
-# RUN conda install -y pip
-
-# # # Create a new conda environment with Python 3.10 named ludwig (Replace 3.10 with the version you need)
-# RUN conda create -y --name ludwig python=3.10
-
-# # # Initialize conda in shell script so conda command can be used
-# SHELL ["conda", "run", "-n", "ludwig", "/bin/bash", "-c"]
-
-# # # Install Ludwig using pip in the ludwig environment
-# RUN pip install ludwig --no-cache-dir
-
-
-# # # Set the default environment to ludwig when starting the container
-# ENV CONDA_DEFAULT_ENV=ludwig
-
-# # # Set working directory
 WORKDIR /
+
+# Update, upgrade, install packages and clean up
+RUN apt-get update --yes && \
+    apt-get upgrade --yes && \
+
+    # Basic Utilities
+    apt install --yes --no-install-recommends \
+    bash \
+    ca-certificates \
+    curl \
+    file \
+    git \
+    inotify-tools \
+    libgl1 \
+    nano \
+    nginx \
+    openssh-server \
+    procps \
+    rsync \
+    software-properties-common \
+    unzip \
+    wget \
+    zip && \
+
+    # Build Tools and Development
+    apt install --yes --no-install-recommends \
+    build-essential \
+    cmake \
+    gfortran \
+    libblas-dev \
+    liblapack-dev && \
+
+    # Image and Video Processing
+    apt install --yes --no-install-recommends \
+    ffmpeg \
+    libavcodec-dev \
+    libavfilter-dev \
+    libavformat-dev \
+    libavresample-dev \
+    libavutil-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libpostproc-dev \
+    libswresample-dev \
+    libswscale-dev \
+    libtiff-dev \
+    libv4l-dev \
+    libx264-dev \
+    libxext6 \
+    libxrender-dev \
+    libxvidcore-dev && \
+
+    # Deep Learning Dependencies and Miscellaneous
+    apt install --yes --no-install-recommends \
+    libatlas-base-dev \
+    libffi-dev \
+    libhdf5-serial-dev \
+    libsm6 \
+    libssl-dev && \
+
+    # File Systems and Storage
+    apt install --yes --no-install-recommends \
+    cifs-utils \
+    nfs-common && \
+
+    # Add the Python PPA and install Python versions
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt install --yes --no-install-recommends \
+    python3.8-dev \
+    python3.8-venv \
+    python3.9-dev \
+    python3.9-venv \
+    python3.10-dev \
+    python3.10-venv \
+    python3.11-dev \
+    python3.11-venv && \
+
+    # Cleanup
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+
+    # Set locale
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+
+# Install pip
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3.8 get-pip.py && \
+    python3.9 get-pip.py && \
+    python3.10 get-pip.py && \
+    python3.11 get-pip.py
+
+# Get the latest pip for all python versions
+RUN python3.8 -m pip install --upgrade pip && \
+    python3.9 -m pip install --upgrade pip && \
+    python3.10 -m pip install --upgrade pip && \
+    python3.11 -m pip install --upgrade pip
+
+
+# Extras
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+RUN brew update && brew install pyenv
+
+# NGINX Proxy
+# COPY --from=proxy nginx.conf /etc/nginx/nginx.conf
+# COPY --from=proxy readme.html /usr/share/nginx/html/readme.html
+
+# Copy the README.md
+COPY README.md /usr/share/nginx/html/README.md
 
 # Start Scripts
 COPY start.sh /
