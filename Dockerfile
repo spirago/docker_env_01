@@ -2,18 +2,22 @@
 FROM ubuntu:22.04
 
 # Set environment variables to avoid any prompts during package installation
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV SHELL=/bin/bash
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/root/miniconda3/bin:$PATH"
 ENV PATH = "/usr/local/bin:$PATH"
 # ENV PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjS9jZFlpVRQLFMFoV3kBdz+lxMOaBxSJ1eFioVZ5+c oli2@poczta.onet.pl"
 ARG PATH="/root/miniconda3/bin:$PATH"
 
-# Update and install some basic packages (petceb added => 15-19)
+# Update and install some basic packages (petceb added => 15-20)
 RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
     openssh-server \
     curl \
+    bash \
     unzip \
     zip \
     wget \
