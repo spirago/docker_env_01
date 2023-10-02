@@ -31,7 +31,7 @@ RUN apt-get update --yes && \
     wget \
     zip && \
 
-# Update and install some basic packages
+# Update and install some basic packages (tom added)
 RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
