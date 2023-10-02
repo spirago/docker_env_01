@@ -6,10 +6,10 @@ set -e  # Exit the script if any statement returns a non-true return value
 # ---------------------------------------------------------------------------- #
 
 # Start nginx service
-start_nginx() {
-    echo "Starting Nginx service..."
-    service nginx start
-}
+# start_nginx() {
+#    echo "Starting Nginx service..."
+#    service nginx start
+# }
 
 # Execute script if exists
 execute_script() {
@@ -40,28 +40,28 @@ export_env_vars() {
 }
 
 # Start jupyter lab
-start_jupyter() {
-    if [[ $JUPYTER_PASSWORD ]]; then
-        echo "Starting Jupyter Lab..."
-        mkdir -p /workspace && \
-        cd / && \
-        nohup jupyter lab --allow-root --no-browser --port=8888 --ip=* --FileContentsManager.delete_to_trash=False --ServerApp.terminado_settings='{"shell_command":["/bin/bash"]}' --ServerApp.token=$JUPYTER_PASSWORD --ServerApp.allow_origin=* --ServerApp.preferred_dir=/workspace &> /jupyter.log &
-        echo "Jupyter Lab started"
-    fi
-}
+# start_jupyter() {
+#    if [[ $JUPYTER_PASSWORD ]]; then
+#       echo "Starting Jupyter Lab..."
+#        mkdir -p /workspace && \
+#        cd / && \
+#        nohup jupyter lab --allow-root --no-browser --port=8888 --ip=* --FileContentsManager.delete_to_trash=False --ServerApp.terminado_settings='{"shell_command":["/bin/bash"]}' --ServerApp.token=$JUPYTER_PASSWORD --ServerApp.allow_origin=* --ServerApp.preferred_dir=/workspace &> /jupyter.log &
+#        echo "Jupyter Lab started"
+#    fi
+# }
 
 # ---------------------------------------------------------------------------- #
 #                               Main Program                                   #
 # ---------------------------------------------------------------------------- #
 
-start_nginx
+# start_nginx
 
 execute_script "/pre_start.sh" "Running pre-start script..."
 
 echo "Pod Started"
 
 setup_ssh
-start_jupyter
+# start_jupyter
 export_env_vars
 
 execute_script "/post_start.sh" "Running post-start script..."
