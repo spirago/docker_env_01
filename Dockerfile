@@ -11,7 +11,7 @@ ENV PATH = "/usr/local/bin:$PATH"
 # ENV PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjS9jZFlpVRQLFMFoV3kBdz+lxMOaBxSJ1eFioVZ5+c oli2@poczta.onet.pl"
 ARG PATH="/root/miniconda3/bin:$PATH"
 
-# Update and install some basic packages (petceb added => 15-20)
+# Update and install some basic packages (petceb added => 15-22)
 RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     bash \
     unzip \
     zip \
-    wget \
     ca-certificates \
     libglib2.0-0 \
     libxext6 \
