@@ -11,6 +11,7 @@ setup_ssh() {
         echo "$PUBLIC_KEY" >> ~/.ssh/authorized_keys
         chmod 700 -R ~/.ssh
         service ssh start
+}
 fi
 setup_ssh
 conda init bash
