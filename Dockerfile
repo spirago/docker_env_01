@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
     ca-certificates \
+    openssh-server \
     libglib2.0-0 \
     libxext6 \
     libsm6 \
