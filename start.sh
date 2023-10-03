@@ -16,4 +16,5 @@ conda init bash
 echo "conda activate ludwig" >> ~/.bashrc
 source /root/.bashrc
 # python /ludwig_finetune.py
+echo "Start script(s) finished, pod is ready to use."
 sleep infinity
