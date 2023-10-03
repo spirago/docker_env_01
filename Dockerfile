@@ -106,6 +106,10 @@ RUN python3.8 -m pip install --upgrade pip && \
     python3.10 -m pip install --upgrade pip && \
     python3.11 -m pip install --upgrade pip
 
+# Install Miniconda
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+RUN bash ~/miniconda.sh -b -p $HOME/miniconda
 
 # Extras
 # RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
