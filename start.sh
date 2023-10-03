@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e  # Exit the script if any statement returns a non-true return value
 
 echo "pod started"
 
@@ -11,8 +12,10 @@ setup_ssh() {
         chmod 700 -R ~/.ssh
         service ssh start
 fi
+setup_ssh
 conda init bash
 echo "conda activate ludwig" >> ~/.bashrc
 source /root/.bashrc
 conda activate ludwig
+echo "Start script(s) finished, pod is ready to use."
 sleep infinity 
