@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t spirago/jenkins-spirago-docker-hub .'
+        sh 'docker build -t spirago/docker-env_01 .'
       }
     }
     stage('Login') {
@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push spirago/jenkins-spirago-docker-hub'
+        sh 'docker push spirago/docker-env_01'
       }
     }
   }
