@@ -12,7 +12,7 @@ import pandas as pd
 from ludwig.api import LudwigModel
 
 # Make sure the below global variables are defined during the env build
-os.environ["HUGGING_FACE_HUB_TOKEN"] = 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
+os.environ["HUGGING_FACE_HUB_TOKEN"] = "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"
 assert os.environ["HUGGING_FACE_HUB_TOKEN"]
 
 
@@ -115,6 +115,8 @@ trainer:
 
 model = LudwigModel(config=qlora_fine_tuning_config, logging_level=logging.INFO)
 results = model.train(dataset=df)
+# LudwigModel.upload_to_hf_hub("your_org/model_name", "path/to/model")
+model.upload_to_hf_hub("oli2/ludwig_finetuned", "/results/api_experiment_run")
 
 
 # What's next once the model has been trained?
