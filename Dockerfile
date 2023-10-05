@@ -5,7 +5,7 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/root/miniconda3/bin:$PATH"
 ENV PATH = "/usr/local/bin:$PATH"
-# ENV PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjS9jZFlpVRQLFMFoV3kBdz+lxMOaBxSJ1eFioVZ5+c oli2@poczta.onet.pl"
+ENV PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjS9jZFlpVRQLFMFoV3kBdz+lxMOaBxSJ1eFioVZ5+c oli2@poczta.onet.pl"
 ARG PATH="/root/miniconda3/bin:$PATH"
 
 # Update and install some basic packages
@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
     ca-certificates \
-    openssh-server \
     libglib2.0-0 \
     libxext6 \
     libsm6 \
@@ -52,7 +51,6 @@ SHELL ["conda", "run", "-n", "ludwig", "/bin/bash", "-c"]
 
 # # Install Ludwig using pip in the ludwig environment
 RUN pip install ludwig --no-cache-dir
-
 
 # # Set the default environment to ludwig when starting the container
 ENV CONDA_DEFAULT_ENV=ludwig
