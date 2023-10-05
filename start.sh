@@ -12,9 +12,10 @@ then
     cd /
     service ssh start
 fi
-conda init bash
-echo "conda activate ludwig" >> ~/.bashrc
-source /root/.bashrc
-# python /ludwig_finetune.py
-echo "Start script(s) finished, pod is ready to use."
-sleep infinity
+
+source /root/miniconda3/etc/profile.d/conda.sh  # Adjust this path based on where Miniconda is installed
+conda activate ludwig
+pip install accelerate
+pip install peft
+python /ludwig_finetune.py
+sleep infinity 
